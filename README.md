@@ -7,7 +7,7 @@
 ## Description
 
 This package provides a `Nix flake` ready to use
-for PHP development, using the [`Nix` package manager][50]
+for Rust development, using the [`Nix` package manager][50]
 which can be installed on (*almost*) any operating system.
 
 Each available environment provides the following tools:
