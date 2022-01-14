@@ -13,8 +13,7 @@ which can be installed on (*almost*) any operating system.
 Each available environment provides the following tools:
 
 * Rust,
-* Cargo,
-* Rustup
+* Cargo
 
 Available Rust versions are:
 

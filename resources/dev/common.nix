@@ -1,6 +1,5 @@
 {
   pkgs,
-  rust-overlay,
   version,
   profile
 }:
@@ -14,7 +13,6 @@ in mkShellNoCC {
   buildInputs = [
     pkgs.openssl
     pkgs.pkgconfig
-    pkgs.rustup
     rust
   ];
 }

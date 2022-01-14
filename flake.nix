@@ -20,35 +20,30 @@
         devShells = {
           default = import ./resources/dev/common.nix {
             inherit pkgs;
-            inherit rust-overlay;
             version = "stable";
             profile = "default";
           };
 
           stable.default = import ./resources/dev/common.nix {
             inherit pkgs;
-            inherit rust-overlay;
             version = "stable";
             profile = "default";
           };
 
           stable.minimal = import ./resources/dev/common.nix {
             inherit pkgs;
-            inherit rust-overlay;
             version = "stable";
             profile = "minimal";
           };
 
           beta.default = import ./resources/dev/common.nix {
             inherit pkgs;
-            inherit rust-overlay;
             version = "beta";
             profile = "default";
           };
 
           beta.minimal = import ./resources/dev/common.nix {
             inherit pkgs;
-            inherit rust-overlay;
             version = "beta";
             profile = "minimal";
           };
