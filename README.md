@@ -17,13 +17,13 @@ Each available environment provides the following tools:
 
 Available Rust versions are:
 
-* Stable
-* Beta
+* `stable`
+* `beta`
 
 Available Rust profiles are:
 
-* Default
-* Minimal
+* `default`
+* `minimal`
 
 ## Usage
 
@@ -35,10 +35,10 @@ nix develop github:loophp/rust-shell#default
 
 Available Rust shells are:
 
-* `stable.default`
-* `stable.minimal`
-* `beta.default`
-* `beta.minimal`
+* `stable-default`
+* `stable-minimal`
+* `beta-default`
+* `beta-minimal`
 
 ## Contributing
 
@@ -70,7 +70,6 @@ For more detailed changelogs, please check [the release changelogs][45].
 [code coverage]: https://img.shields.io/scrutinizer/coverage/g/loophp/rust-shell/master.svg?style=flat-square
 [license]: https://img.shields.io/packagist/l/loophp/rust-shell.svg?style=flat-square
 [donate github]: https://img.shields.io/badge/Sponsor-Github-brightgreen.svg?style=flat-square
-[donate paypal]: https://img.shields.io/badge/Sponsor-Paypal-brightgreen.svg?style=flat-square
 [34]: https://github.com/loophp/rust-shell/issues
 [2]: https://github.com/loophp/rust-shell/actions
 [35]: http://www.phpspec.net/
@@ -84,6 +83,4 @@ For more detailed changelogs, please check [the release changelogs][45].
 [44]: https://github.com/loophp/rust-shell/commits/master
 [45]: https://github.com/loophp/rust-shell/releases
 [46]: https://nixos.org/guides/nix-pills/developing-with-rust-shell.html
-[47]: https://github.com/jtojnar
-[48]: https://github.com/fossar/nix-phps
 [50]: https://nixos.org/download.html

@@ -14,40 +14,103 @@
         pkgs = import nixpkgs {
           inherit system overlays;
         };
-      in
-      with pkgs;
-      {
-        devShells = {
-          default = import ./resources/dev/common.nix {
-            inherit pkgs;
+
+        makeRustEnv =
+          { version
+          , profile
+          }:
+          let
+            rust = pkgs.rust-bin.${version}.latest.${profile}.override { extensions = [ "rust-src" ]; };
+            path = pkgs.rust.packages.${version}.rustPlatform.rustLibSrc;
+          in
+          pkgs.buildEnv {
+            name = "rust-" + version + "-" + profile;
+
+            paths = [
+              pkgs.openssl
+              pkgs.pkgconfig
+              rust
+            ];
+          };
+
+        environments = {
+          default = {
             version = "stable";
             profile = "default";
           };
 
-          stable.default = import ./resources/dev/common.nix {
-            inherit pkgs;
+          stable-default = {
             version = "stable";
             profile = "default";
           };
 
-          stable.minimal = import ./resources/dev/common.nix {
-            inherit pkgs;
+          stable-minimal = {
             version = "stable";
             profile = "minimal";
           };
 
-          beta.default = import ./resources/dev/common.nix {
-            inherit pkgs;
+          beta-default = {
             version = "beta";
             profile = "default";
           };
 
-          beta.minimal = import ./resources/dev/common.nix {
-            inherit pkgs;
+          beta-minimal = {
             version = "beta";
             profile = "minimal";
           };
         };
+      in
+      {
+        devShell =
+          let
+            version = environments.default.version;
+            profile = environments.default.profile;
+            rust = (pkgs.rust-bin.${version}.latest.${profile}.override { extensions = [ "rust-src" ]; });
+            path = pkgs.rust.packages.${version}.rustPlatform.rustLibSrc;
+          in
+          pkgs.mkShellNoCC {
+            name = "rust-" + version + "-" + profile;
+
+            RUST_SRC_PATH = path;
+
+            buildInputs = [
+              pkgs.openssl
+              pkgs.pkgconfig
+              rust
+            ];
+          };
+
+        devShells = builtins.mapAttrs
+          (
+            name: value:
+              let
+                version = value.version;
+                profile = value.profile;
+                rust = (pkgs.rust-bin.${version}.latest.${profile}.override { extensions = [ "rust-src" ]; });
+                path = pkgs.rust.packages.${version}.rustPlatform.rustLibSrc;
+              in
+              pkgs.mkShellNoCC {
+                name = "rust-" + version + "-" + profile;
+
+                RUST_SRC_PATH = path;
+
+                buildInputs = [
+                  pkgs.openssl
+                  pkgs.pkgconfig
+                  rust
+                ];
+              }
+          )
+          environments;
+
+        packages = builtins.mapAttrs
+          (name: value: makeRustEnv {
+            version = value.version;
+            profile = value.profile;
+          })
+          environments;
+
+        defaultPackage = environments.default;
       }
     );
 }
