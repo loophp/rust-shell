@@ -11,34 +11,46 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         overlays = [ (import rust-overlay) ];
+
         pkgs = import nixpkgs {
           inherit system overlays;
         };
 
-        makeRustEnv =
+        makeRustInfo =
           { version
           , profile
           }:
           let
-            rust = pkgs.rust-bin.${version}.latest.${profile}.override { extensions = [ "rust-src" ]; };
+            rust = (pkgs.rust-bin.${version}.latest.${profile}.override { extensions = [ "rust-src" ]; });
             path = pkgs.rust.packages.${version}.rustPlatform.rustLibSrc;
           in
-          pkgs.buildEnv {
+          {
             name = "rust-" + version + "-" + profile;
 
-            paths = [
+            path = path;
+
+            drvs = [
               pkgs.openssl
               pkgs.pkgconfig
               rust
             ];
           };
 
-        environments = {
-          default = {
-            version = "stable";
-            profile = "default";
+        makeRustEnv =
+          { version
+          , profile
+          }:
+          let
+            rustInfo = makeRustInfo {
+              inherit version profile;
+            };
+          in
+          pkgs.buildEnv {
+            name = rustInfo.name;
+            paths = rustInfo.drvs;
           };
 
+        matrix = {
           stable-default = {
             version = "stable";
             profile = "default";
@@ -63,21 +75,18 @@
       {
         devShell =
           let
-            version = environments.default.version;
-            profile = environments.default.profile;
-            rust = (pkgs.rust-bin.${version}.latest.${profile}.override { extensions = [ "rust-src" ]; });
-            path = pkgs.rust.packages.${version}.rustPlatform.rustLibSrc;
+            version = matrix.stable-default.version;
+            profile = matrix.stable-default.profile;
+            rustInfo = makeRustInfo {
+              inherit version profile;
+            };
           in
           pkgs.mkShellNoCC {
-            name = "rust-" + version + "-" + profile;
+            name = rustInfo.name;
 
-            RUST_SRC_PATH = path;
+            RUST_SRC_PATH = rustInfo.path;
 
-            buildInputs = [
-              pkgs.openssl
-              pkgs.pkgconfig
-              rust
-            ];
+            buildInputs = rustInfo.drvs;
           };
 
         devShells = builtins.mapAttrs
@@ -86,31 +95,28 @@
               let
                 version = value.version;
                 profile = value.profile;
-                rust = (pkgs.rust-bin.${version}.latest.${profile}.override { extensions = [ "rust-src" ]; });
-                path = pkgs.rust.packages.${version}.rustPlatform.rustLibSrc;
+                rustInfo = makeRustInfo {
+                  inherit version profile;
+                };
               in
               pkgs.mkShellNoCC {
-                name = "rust-" + version + "-" + profile;
+                name = rustInfo.name;
 
-                RUST_SRC_PATH = path;
+                RUST_SRC_PATH = rustInfo.path;
 
-                buildInputs = [
-                  pkgs.openssl
-                  pkgs.pkgconfig
-                  rust
-                ];
+                buildInputs = rustInfo.drvs;
               }
           )
-          environments;
+          matrix;
 
         packages = builtins.mapAttrs
           (name: value: makeRustEnv {
             version = value.version;
             profile = value.profile;
           })
-          environments;
+          matrix;
 
-        defaultPackage = environments.default;
+        defaultPackage = matrix.stable-default;
       }
     );
 }
