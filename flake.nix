@@ -116,7 +116,10 @@
           })
           matrix;
 
-        defaultPackage = matrix.stable-default;
+        defaultPackage = makeRustEnv {
+          version = "stable";
+          profile = "default";
+        };
       }
     );
 }

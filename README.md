@@ -1,5 +1,4 @@
-[![GitHub stars][github stars]][1]
- [![License][license]][1]
+![GitHub stars][github stars]
  [![Donate!][donate github]][5]
 
 # Rust shell
@@ -27,10 +26,10 @@ Available Rust profiles are:
 
 ## Usage
 
-To work with `Rust stable with default profile` (latest stable version):
+To work with `Rust beta with default profile`:
 
 ```shell
-nix develop github:loophp/rust-shell#default
+nix shell github:loophp/rust-shell#beta-default
 ```
 
 Available Rust shells are:
