@@ -7,44 +7,46 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, flake-utils, nixpkgs, rust-overlay }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        overlays = [ (import rust-overlay) ];
-
+  outputs = {
+    self,
+    flake-utils,
+    nixpkgs,
+    rust-overlay,
+  }:
+    flake-utils.lib.eachDefaultSystem (
+      system: let
         pkgs = import nixpkgs {
-          inherit system overlays;
+          inherit system;
+          overlays = [(import rust-overlay)];
         };
 
-        makeRustInfo =
-          { version
-          , profile
-          }:
-          let
-            rust = (pkgs.rust-bin.${version}.latest.${profile}.override { extensions = [ "rust-src" ]; });
-            path = pkgs.rust.packages.${version}.rustPlatform.rustLibSrc;
-          in
-          {
-            name = "rust-" + version + "-" + profile;
+        makeRustInfo = {
+          version,
+          profile,
+        }: let
+          rust = pkgs.rust-bin.${version}.latest.${profile}.override {extensions = ["rust-src"];};
+          path = pkgs.rust.packages.${version}.rustPlatform.rustLibSrc;
+        in {
+          name = "rust-" + version + "-" + profile;
 
-            path = path;
+          path = path;
 
-            drvs = [
-              pkgs.openssl
-              pkgs.pkgconfig
-              rust
-            ];
+          drvs = [
+            pkgs.just
+            pkgs.openssl
+            pkgs.pkgconfig
+            rust
+          ];
+        };
+
+        makeRustEnv = {
+          version,
+          profile,
+        }: let
+          rustInfo = makeRustInfo {
+            inherit version profile;
           };
-
-        makeRustEnv =
-          { version
-          , profile
-          }:
-          let
-            rustInfo = makeRustInfo {
-              inherit version profile;
-            };
-          in
+        in
           pkgs.buildEnv {
             name = rustInfo.name;
             paths = rustInfo.drvs;
@@ -71,16 +73,16 @@
             profile = "minimal";
           };
         };
-      in
-      {
-        devShell =
-          let
-            version = matrix.stable-default.version;
-            profile = matrix.stable-default.profile;
-            rustInfo = makeRustInfo {
-              inherit version profile;
-            };
-          in
+      in {
+        formatter = pkgs.alejandra;
+
+        devShell = let
+          version = matrix.stable-default.version;
+          profile = matrix.stable-default.profile;
+          rustInfo = makeRustInfo {
+            inherit version profile;
+          };
+        in
           pkgs.mkShellNoCC {
             name = rustInfo.name;
 
@@ -89,16 +91,16 @@
             buildInputs = rustInfo.drvs;
           };
 
-        devShells = builtins.mapAttrs
+        devShells =
+          builtins.mapAttrs
           (
-            name: value:
-              let
-                version = value.version;
-                profile = value.profile;
-                rustInfo = makeRustInfo {
-                  inherit version profile;
-                };
-              in
+            name: value: let
+              version = value.version;
+              profile = value.profile;
+              rustInfo = makeRustInfo {
+                inherit version profile;
+              };
+            in
               pkgs.mkShellNoCC {
                 name = rustInfo.name;
 
@@ -109,11 +111,13 @@
           )
           matrix;
 
-        packages = builtins.mapAttrs
-          (name: value: makeRustEnv {
-            version = value.version;
-            profile = value.profile;
-          })
+        packages =
+          builtins.mapAttrs
+          (name: value:
+            makeRustEnv {
+              version = value.version;
+              profile = value.profile;
+            })
           matrix;
 
         defaultPackage = makeRustEnv {
