@@ -1,28 +1,27 @@
-![GitHub stars][github stars]
- [![Donate!][donate github]][5]
+![GitHub stars][github stars] [![Donate!][donate github]][5]
 
 # Rust shell
 
 ## Description
 
-This package provides a `Nix flake` ready to use
-for Rust development, using the [`Nix` package manager][50]
-which can be installed on (*almost*) any operating system.
+This package provides a `Nix flake` ready to use for Rust development, using the
+[`Nix` package manager][50] which can be installed on (_almost_) any operating
+system.
 
 Each available environment provides the following tools:
 
-* Rust,
-* Cargo
+- Rust,
+- Cargo
 
 Available Rust versions are:
 
-* `stable`
-* `beta`
+- `stable`
+- `beta`
 
 Available Rust profiles are:
 
-* `default`
-* `minimal`
+- `default`
+- `minimal`
 
 ## Usage
 
@@ -34,21 +33,20 @@ nix shell github:loophp/rust-shell#beta-default
 
 Available Rust shells are:
 
-* `stable-default`
-* `stable-minimal`
-* `beta-default`
-* `beta-minimal`
+- `stable-default`
+- `stable-minimal`
+- `beta-default`
+- `beta-minimal`
 
 ## Contributing
 
-Feel free to contribute by sending pull requests. We are a
-usually very responsive team and we will help you going
-through your pull request from the beginning to the end.
+Feel free to contribute by sending pull requests. We are a usually very
+responsive team and we will help you going through your pull request from the
+beginning to the end.
 
-For some reasons, if you can't contribute to the code and
-willing to help, sponsoring is a good, sound and safe way
-to show us some gratitude for the hours we invested in this
-package.
+For some reasons, if you can't contribute to the code and willing to help,
+sponsoring is a good, sound and safe way to show us some gratitude for the hours
+we invested in this package.
 
 Sponsor me on [Github][5] and/or any of [the contributors][6].
 
@@ -58,17 +56,26 @@ See [CHANGELOG.md][43] for a changelog based on [git commits][44].
 
 For more detailed changelogs, please check [the release changelogs][45].
 
-[latest stable version]: https://img.shields.io/packagist/v/loophp/rust-shell.svg?style=flat-square
-[github stars]: https://img.shields.io/github/stars/loophp/rust-shell.svg?style=flat-square
-[total downloads]: https://img.shields.io/packagist/dt/loophp/rust-shell.svg?style=flat-square
-[github workflow status]: https://img.shields.io/github/workflow/status/loophp/rust-shell/Unit%20tests?style=flat-square
-[code quality]: https://img.shields.io/scrutinizer/quality/g/loophp/rust-shell/master.svg?style=flat-square
+[latest stable version]:
+  https://img.shields.io/packagist/v/loophp/rust-shell.svg?style=flat-square
+[github stars]:
+  https://img.shields.io/github/stars/loophp/rust-shell.svg?style=flat-square
+[total downloads]:
+  https://img.shields.io/packagist/dt/loophp/rust-shell.svg?style=flat-square
+[github workflow status]:
+  https://img.shields.io/github/workflow/status/loophp/rust-shell/Unit%20tests?style=flat-square
+[code quality]:
+  https://img.shields.io/scrutinizer/quality/g/loophp/rust-shell/master.svg?style=flat-square
 [3]: https://scrutinizer-ci.com/g/loophp/rust-shell/?branch=master
-[type coverage]: https://img.shields.io/badge/dynamic/json?style=flat-square&color=color&label=Type%20coverage&query=message&url=https%3A%2F%2Fshepherd.dev%2Fgithub%2Floophp%2Fcollection%2Fcoverage
+[type coverage]:
+  https://img.shields.io/badge/dynamic/json?style=flat-square&color=color&label=Type%20coverage&query=message&url=https%3A%2F%2Fshepherd.dev%2Fgithub%2Floophp%2Fcollection%2Fcoverage
 [4]: https://shepherd.dev/github/loophp/rust-shell
-[code coverage]: https://img.shields.io/scrutinizer/coverage/g/loophp/rust-shell/master.svg?style=flat-square
-[license]: https://img.shields.io/packagist/l/loophp/rust-shell.svg?style=flat-square
-[donate github]: https://img.shields.io/badge/Sponsor-Github-brightgreen.svg?style=flat-square
+[code coverage]:
+  https://img.shields.io/scrutinizer/coverage/g/loophp/rust-shell/master.svg?style=flat-square
+[license]:
+  https://img.shields.io/packagist/l/loophp/rust-shell.svg?style=flat-square
+[donate github]:
+  https://img.shields.io/badge/Sponsor-Github-brightgreen.svg?style=flat-square
 [34]: https://github.com/loophp/rust-shell/issues
 [2]: https://github.com/loophp/rust-shell/actions
 [35]: http://www.phpspec.net/

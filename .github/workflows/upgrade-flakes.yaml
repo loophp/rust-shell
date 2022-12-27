@@ -1,8 +1,8 @@
-name: 'Update flake lock file'
+name: "Update flake lock file"
 
 on:
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: "0 0 * * 1"
 
 jobs:
   createPullRequest:
