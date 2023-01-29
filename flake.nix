@@ -4,12 +4,23 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     rust-overlay.url = "github:oxalica/rust-overlay";
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = inputs:
-    inputs.flake-utils.lib.eachDefaultSystem (
-      system: let
+  outputs = inputs @ {flake-parts, ...}:
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = [
+        "x86_64-linux"
+        "x86_64-darwin"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
+
+      perSystem = {
+        config,
+        pkgs,
+        system,
+        ...
+      }: let
         pkgs = import inputs.nixpkgs {
           inherit system;
           overlays = [(import inputs.rust-overlay)];
@@ -20,11 +31,11 @@
           profile,
         }: let
           rust = pkgs.rust-bin.${version}.latest.${profile}.override {extensions = ["rust-src"];};
-          path = pkgs.rust.packages.${version}.rustPlatform.rustLibSrc;
         in {
           name = "rust-" + version + "-" + profile;
 
-          path = path;
+          # From https://discourse.nixos.org/t/rust-src-not-found-and-other-misadventures-of-developing-rust-on-nixos/11570/11
+          path = "${rust}/lib/rustlib/src/rust/library";
 
           drvs = [
             pkgs.just
@@ -72,21 +83,6 @@
       in {
         formatter = pkgs.alejandra;
 
-        devShell = let
-          version = matrix.stable-default.version;
-          profile = matrix.stable-default.profile;
-          rustInfo = makeRustInfo {
-            inherit version profile;
-          };
-        in
-          pkgs.mkShellNoCC {
-            name = rustInfo.name;
-
-            RUST_SRC_PATH = rustInfo.path;
-
-            buildInputs = rustInfo.drvs;
-          };
-
         devShells =
           builtins.mapAttrs
           (
@@ -105,7 +101,23 @@
                 buildInputs = rustInfo.drvs;
               }
           )
-          matrix;
+          matrix
+          // {
+            default = let
+              version = matrix.stable-default.version;
+              profile = matrix.stable-default.profile;
+              rustInfo = makeRustInfo {
+                inherit version profile;
+              };
+            in
+              pkgs.mkShellNoCC {
+                name = rustInfo.name;
+
+                RUST_SRC_PATH = rustInfo.path;
+
+                buildInputs = rustInfo.drvs;
+              };
+          };
 
         packages =
           builtins.mapAttrs
@@ -114,12 +126,13 @@
               version = value.version;
               profile = value.profile;
             })
-          matrix;
-
-        defaultPackage = makeRustEnv {
-          version = "stable";
-          profile = "default";
-        };
-      }
-    );
+          matrix
+          // {
+            "default" = makeRustEnv {
+              version = "stable";
+              profile = "default";
+            };
+          };
+      };
+    };
 }
