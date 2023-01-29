@@ -1,11 +1,10 @@
-name: Nix formatter checks
+name: Nix flake check
 
 on:
   pull_request:
-  push:
 
 jobs:
-  format-check:
+  lockfile:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -14,5 +13,5 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v18
 
-      - name: Run nix formatter tool
-        run: nix fmt . -- --check
+      - name: Run nix flake check
+        run: nix flake check
