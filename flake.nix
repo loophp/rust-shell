@@ -118,21 +118,6 @@
                 buildInputs = rustInfo.drvs;
               };
           };
-
-        packages =
-          builtins.mapAttrs
-          (name: value:
-            makeRustEnv {
-              version = value.version;
-              profile = value.profile;
-            })
-          matrix
-          // {
-            "default" = makeRustEnv {
-              version = "stable";
-              profile = "default";
-            };
-          };
       };
     };
 }
