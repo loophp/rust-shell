@@ -39,7 +39,6 @@
 
           drvs = [
             pkgs.just
-            pkgs.gcc
             pkgs.openssl
             pkgs.pkgconfig
             pkgs.rust-analyzer
@@ -94,7 +93,7 @@
                 inherit version profile;
               };
             in
-              pkgs.mkShellNoCC {
+              pkgs.mkShell {
                 name = rustInfo.name;
 
                 RUST_SRC_PATH = rustInfo.path;
@@ -111,7 +110,7 @@
                 inherit version profile;
               };
             in
-              pkgs.mkShellNoCC {
+              pkgs.mkShell {
                 name = rustInfo.name;
 
                 RUST_SRC_PATH = rustInfo.path;
