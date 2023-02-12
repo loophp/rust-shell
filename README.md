@@ -28,7 +28,7 @@ Available Rust profiles are:
 To work with `Rust beta with default profile`:
 
 ```shell
-nix shell github:loophp/rust-shell#beta-default
+nix develop github:loophp/rust-shell#beta-default
 ```
 
 Available Rust shells are:
@@ -37,6 +37,15 @@ Available Rust shells are:
 - `stable-minimal`
 - `beta-default`
 - `beta-minimal`
+
+### With direnv
+
+To use it in your Rust project with nix-direnv, just create a file `.envrc` with
+the following content:
+
+```
+use flake github:loophp/rust-shell
+```
 
 ## Contributing
 
