@@ -39,6 +39,7 @@
 
           drvs = [
             pkgs.just
+            pkgs.gcc
             pkgs.openssl
             pkgs.pkgconfig
             pkgs.rust-analyzer
