@@ -40,7 +40,7 @@
           drvs = [
             pkgs.just
             pkgs.openssl
-            pkgs.pkgconfig
+            pkgs.pkg-config
             pkgs.rust-analyzer
             rust
           ];
