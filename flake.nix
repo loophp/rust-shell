@@ -79,6 +79,16 @@
             version = "beta";
             profile = "minimal";
           };
+
+          nightly-default = {
+            version = "nightly";
+            profile = "default";
+          };
+
+          nightly-minimal = {
+            version = "nightly";
+            profile = "minimal";
+          };
         };
       in {
         formatter = pkgs.alejandra;
